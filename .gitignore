@@ -11,7 +11,8 @@ logs/
 .user.yml
 package-lock.yml
 
-# DuckLake
+# Generated artifacts
+.queria/
 .fdl/
 
 # Environment
