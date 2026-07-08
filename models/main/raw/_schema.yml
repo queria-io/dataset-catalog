@@ -79,3 +79,9 @@ models:
   description: EDINET 書類一覧 (catalog)
 - name: raw_edinet_meta
   description: EDINET 書類一覧 (メタデータ)
+- name: raw_mediaarts_db_manifest
+  description: メディア芸術データベース (manifest)
+- name: raw_mediaarts_db_catalog
+  description: メディア芸術データベース (catalog)
+- name: raw_mediaarts_db_meta
+  description: メディア芸術データベース (メタデータ)
