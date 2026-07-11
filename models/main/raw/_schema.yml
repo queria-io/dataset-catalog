@@ -85,3 +85,9 @@ models:
   description: メディア芸術データベース (catalog)
 - name: raw_mediaarts_db_meta
   description: メディア芸術データベース (メタデータ)
+- name: raw_mhlw_manifest
+  description: 厚生労働省 (manifest)
+- name: raw_mhlw_catalog
+  description: 厚生労働省 (catalog)
+- name: raw_mhlw_meta
+  description: 厚生労働省 (メタデータ)
