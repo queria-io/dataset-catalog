@@ -28,3 +28,5 @@ UNION ALL
 SELECT * FROM {{ ref('raw_edinet_manifest') }}
 UNION ALL
 SELECT * FROM {{ ref('raw_mediaarts_db_manifest') }}
+UNION ALL
+SELECT * FROM {{ ref('raw_mhlw_manifest') }}

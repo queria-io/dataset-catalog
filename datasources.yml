@@ -27,3 +27,5 @@ datasources:
     description: EDINET 書類一覧
   - name: mediaarts_db
     description: メディア芸術データベース
+  - name: mhlw
+    description: 厚生労働省
