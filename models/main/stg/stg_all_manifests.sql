@@ -32,3 +32,5 @@ UNION ALL
 SELECT * FROM {{ ref('raw_mhlw_manifest') }}
 UNION ALL
 SELECT * FROM {{ ref('raw_gsi_manifest') }}
+UNION ALL
+SELECT * FROM {{ ref('raw_metro_tokyo_manifest') }}
