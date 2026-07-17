@@ -32,3 +32,5 @@ UNION ALL
 SELECT * FROM {{ ref('raw_mhlw_catalog') }}
 UNION ALL
 SELECT * FROM {{ ref('raw_gsi_catalog') }}
+UNION ALL
+SELECT * FROM {{ ref('raw_metro_tokyo_catalog') }}

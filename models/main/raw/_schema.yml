@@ -97,3 +97,9 @@ models:
   description: 国土地理院 指定緊急避難場所・指定避難所データ (catalog)
 - name: raw_gsi_meta
   description: 国土地理院 指定緊急避難場所・指定避難所データ (メタデータ)
+- name: raw_metro_tokyo_manifest
+  description: 東京都オープンデータカタログ (manifest)
+- name: raw_metro_tokyo_catalog
+  description: 東京都オープンデータカタログ (catalog)
+- name: raw_metro_tokyo_meta
+  description: 東京都オープンデータカタログ (メタデータ)
