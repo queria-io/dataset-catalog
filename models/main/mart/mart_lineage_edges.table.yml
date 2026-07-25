@@ -1,0 +1,7 @@
+schema: main
+name: mart_lineage_edges
+title: リネージュエッジ
+description: dbt 依存関係エッジ (manifest.parent_map)
+keywords:
+  - カタログ
+published: true

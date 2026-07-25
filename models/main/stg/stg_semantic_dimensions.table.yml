@@ -1,0 +1,4 @@
+schema: main
+name: stg_semantic_dimensions
+description: semantic_models.dimensions を展開
+published: false

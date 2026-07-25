@@ -1,0 +1,4 @@
+schema: main
+name: raw_lg_code_catalog
+description: 全国地方公共団体コード (catalog)
+published: false

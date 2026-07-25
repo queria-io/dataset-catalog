@@ -1,0 +1,4 @@
+schema: main
+name: stg_columns
+description: manifest columns + catalog 型情報を結合
+published: false

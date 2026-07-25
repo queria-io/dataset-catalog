@@ -1,0 +1,7 @@
+schema: main
+name: mart_entity_links
+title: エンティティリンク
+description: semantic entities の self-join (クロスデータセット結合グラフ)
+keywords:
+  - カタログ
+published: true

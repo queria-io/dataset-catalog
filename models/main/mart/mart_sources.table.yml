@@ -1,0 +1,30 @@
+schema: main
+name: mart_sources
+title: ソース一覧
+description: dbt sources 一覧
+keywords:
+  - カタログ
+published: true
+fields:
+  - name: datasource
+    description: データセット識別子
+  - name: unique_id
+    description: dbt source 一意 ID
+  - name: source_name
+    description: source 名
+  - name: name
+    description: テーブル名
+  - name: schema_name
+    description: スキーマ名
+  - name: database
+    description: データベース名
+  - name: description
+    description: ソースの説明
+  - name: identifier
+    description: 物理識別子
+  - name: loader
+    description: ローダー
+  - name: meta_json
+    description: meta dict 全体 (raw)
+  - name: tags_json
+    description: タグ (JSON 配列)

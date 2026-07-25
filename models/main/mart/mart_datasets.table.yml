@@ -1,0 +1,40 @@
+schema: main
+name: mart_datasets
+title: データセット一覧
+description: データセット一覧（fdl.toml + manifest.metadata）
+keywords:
+  - カタログ
+published: true
+fields:
+  - name: datasource
+    description: データセット識別子
+  - name: title
+    description: データセットのタイトル
+  - name: description
+    description: データセットの説明
+  - name: cover
+    description: カバー画像URLまたは絵文字
+  - name: ducklake_url
+    description: DuckLake の公開 URL
+  - name: repository_url
+    description: GitHub リポジトリ URL
+  - name: schedule
+    description: 更新スケジュール (daily, weekly, monthly, yearly)
+  - name: tags_json
+    description: タグ（JSON 配列）
+  - name: license
+    description: ライセンス
+  - name: license_url
+    description: ライセンス URL
+  - name: source_url
+    description: データソース URL
+  - name: schemas_json
+    description: スキーマごとのメタデータ (JSON)
+  - name: dbt_version
+    description: dbt バージョン (manifest.metadata)
+  - name: dbt_generated_at
+    description: manifest.json の生成時刻
+  - name: dbt_invocation_id
+    description: dbt invocation ID
+  - name: readme
+    description: データセットの説明（Markdown）

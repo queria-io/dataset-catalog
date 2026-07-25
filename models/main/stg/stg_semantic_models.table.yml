@@ -1,0 +1,4 @@
+schema: main
+name: stg_semantic_models
+description: manifest.semantic_models を1行1semantic model に展開 (raw JSON 保持)
+published: false

@@ -1,0 +1,4 @@
+schema: main
+name: raw_houjin_bangou_manifest
+description: 国税庁法人番号 (manifest)
+published: false

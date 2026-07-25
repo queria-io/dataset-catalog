@@ -1,0 +1,58 @@
+schema: main
+name: mart_nodes
+title: dbt ノード一覧
+description: dbt nodes 一覧（model/test/seed/snapshot 全 resource_type）
+keywords:
+  - カタログ
+published: true
+fields:
+  - name: datasource
+    description: データセット識別子
+  - name: unique_id
+    description: dbt ノード一意 ID (例 model.e_stat.small_area)
+  - name: resource_type
+    description: リソース種別 (model/test/seed/snapshot/operation)
+  - name: name
+    description: ノード名
+  - name: schema_name
+    description: スキーマ名
+  - name: database
+    description: データベース名
+  - name: alias
+    description: エイリアス
+  - name: description
+    description: ノードの説明
+  - name: materialized
+    description: マテリアライゼーション (table/view/incremental/ephemeral)
+  - name: access
+    description: アクセス制御 (protected/public/private)
+  - name: file_path
+    description: ソースファイルパス
+  - name: title
+    description: meta.title から派生
+  - name: is_published
+    description: meta.published から派生
+  - name: license
+    description: ライセンス (3段階フォールバック済み)
+  - name: license_url
+    description: ライセンス URL
+  - name: source_url
+    description: データソース URL
+  - name: tags_json
+    description: タグ (JSON 配列)
+  - name: meta_json
+    description: meta dict 全体 (raw)
+  - name: config_json
+    description: config dict 全体 (raw)
+  - name: depends_on_json
+    description: 依存関係 {nodes, macros} (raw)
+  - name: refs_json
+    description: ref() リスト (raw)
+  - name: sources_json
+    description: source() リスト (raw)
+  - name: fqn_json
+    description: 完全修飾名 (raw)
+  - name: compiled_code
+    description: コンパイル済み SQL
+  - name: node_index
+    description: manifest 内の出現順序

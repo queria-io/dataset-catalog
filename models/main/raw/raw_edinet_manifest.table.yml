@@ -1,0 +1,4 @@
+schema: main
+name: raw_edinet_manifest
+description: EDINET 書類一覧 (manifest)
+published: false

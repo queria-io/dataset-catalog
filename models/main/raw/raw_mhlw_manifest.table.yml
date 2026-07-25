@@ -1,0 +1,4 @@
+schema: main
+name: raw_mhlw_manifest
+description: 厚生労働省 (manifest)
+published: false

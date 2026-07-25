@@ -1,0 +1,30 @@
+schema: main
+name: mart_columns
+title: カラム一覧
+description: カラム定義一覧
+keywords:
+  - カタログ
+published: true
+fields:
+  - name: datasource
+    description: データセット識別子
+  - name: unique_id
+    description: dbt ノード unique_id (mart_nodes への FK)
+  - name: table_name
+    description: 所属テーブル名 (unique_id から派生、検索用)
+  - name: column_name
+    description: カラム名
+  - name: column_index
+    description: カラムの定義順序 (catalog.json から)
+  - name: title
+    description: カラムの論理名 (meta.title)
+  - name: description
+    description: カラムの説明 (meta.description > description の優先順位)
+  - name: data_type
+    description: データ型 (catalog > manifest の優先順位)
+  - name: meta_json
+    description: meta dict 全体 (raw)
+  - name: constraints_json
+    description: 制約情報 (raw)
+  - name: nullable
+    description: NULL許容フラグ

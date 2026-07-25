@@ -1,0 +1,4 @@
+schema: main
+name: stg_lineage_edges
+description: manifest.parent_map を edge リストに展開
+published: false

@@ -1,0 +1,16 @@
+schema: main
+name: mart_semantic_models
+title: セマンティックモデル一覧
+description: dbt semantic_models 一覧 (raw JSON 保持)
+keywords:
+  - カタログ
+published: true
+fields:
+  - name: table_unique_id
+    description: 対応する mart_nodes.unique_id
+  - name: entities_json
+    description: entities 配列 (raw)
+  - name: dimensions_json
+    description: dimensions 配列 (raw)
+  - name: measures_json
+    description: measures 配列 (raw)

@@ -1,0 +1,4 @@
+schema: main
+name: stg_datasets
+description: fdl.toml + manifest.metadata を統合
+published: false

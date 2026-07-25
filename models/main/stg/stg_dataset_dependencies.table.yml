@@ -1,0 +1,4 @@
+schema: main
+name: stg_dataset_dependencies
+description: データセット間依存関係（未実装、空）
+published: false

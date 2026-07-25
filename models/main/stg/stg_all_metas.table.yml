@@ -1,0 +1,4 @@
+schema: main
+name: stg_all_metas
+description: 全データセットの fdl.toml メタデータ JSON を UNION ALL
+published: false

@@ -1,0 +1,4 @@
+schema: main
+name: raw_articles_catalog
+description: Queriaショーケース記事 (catalog)
+published: false

@@ -1,0 +1,4 @@
+schema: main
+name: raw_mediaarts_db_meta
+description: メディア芸術データベース (メタデータ)
+published: false

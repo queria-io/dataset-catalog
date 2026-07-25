@@ -1,0 +1,4 @@
+schema: main
+name: raw_zipcode_manifest
+description: 郵便番号データセット (manifest)
+published: false

@@ -1,0 +1,14 @@
+schema: main
+name: mart_schemas
+title: スキーマ一覧
+description: データセットのスキーマ一覧
+keywords:
+  - カタログ
+published: true
+fields:
+  - name: datasource
+    description: データセット識別子
+  - name: schema_name
+    description: スキーマ名
+  - name: title
+    description: スキーマのタイトル

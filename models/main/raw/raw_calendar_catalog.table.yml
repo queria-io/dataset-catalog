@@ -1,0 +1,4 @@
+schema: main
+name: raw_calendar_catalog
+description: 日本の暦データ (catalog)
+published: false

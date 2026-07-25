@@ -1,0 +1,4 @@
+schema: main
+name: raw_gbizinfo_manifest
+description: gBizINFO 法人活動情報 (manifest)
+published: false

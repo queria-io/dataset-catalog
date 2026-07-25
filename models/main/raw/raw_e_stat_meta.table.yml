@@ -1,0 +1,4 @@
+schema: main
+name: raw_e_stat_meta
+description: e-Stat 統計データ (メタデータ)
+published: false
