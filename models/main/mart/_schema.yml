@@ -199,7 +199,7 @@ models:
         description: カラムの論理名 (meta.title)
         data_type: VARCHAR
       - name: description
-        description: カラムの説明
+        description: カラムの説明 (meta.description > description の優先順位)
         data_type: VARCHAR
       - name: data_type
         description: データ型 (catalog > manifest の優先順位)
