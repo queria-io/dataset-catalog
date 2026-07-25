@@ -44,7 +44,12 @@ SELECT
     nc.col_name AS column_name,
     COALESCE(ct.catalog_index, ROW_NUMBER() OVER (PARTITION BY nc.unique_id ORDER BY nc.col_name))::INTEGER AS column_index,
     COALESCE(nc.col->'meta'->>'title', '') AS title,
-    nc.col->>'description' AS description,
+    -- 大半のデータセットはカラム説明を meta.description に書いているため優先し、
+    -- dbt ネイティブのトップレベル description をフォールバックにする
+    COALESCE(
+        NULLIF(nc.col->'meta'->>'description', ''),
+        nc.col->>'description'
+    ) AS description,
     COALESCE(ct.catalog_type, nc.col->>'data_type', '') AS data_type,
     nc.col->'meta' AS meta_json,
     nc.col->'constraints' AS constraints_json,
