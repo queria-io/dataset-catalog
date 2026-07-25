@@ -1,0 +1,4 @@
+schema: main
+name: raw_metro_tokyo_manifest
+description: 東京都オープンデータカタログ (manifest)
+published: false

@@ -1,0 +1,4 @@
+schema: main
+name: stg_semantic_measures
+description: semantic_models.measures を展開
+published: false

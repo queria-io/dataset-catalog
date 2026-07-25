@@ -1,0 +1,4 @@
+schema: main
+name: stg_nodes
+description: manifest.nodes の全 resource_type を1行1ノードに展開
+published: false

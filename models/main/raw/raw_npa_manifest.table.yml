@@ -1,0 +1,4 @@
+schema: main
+name: raw_npa_manifest
+description: 警察庁・都道府県警察 犯罪・交通事故統計 (manifest)
+published: false

@@ -1,0 +1,20 @@
+schema: main
+name: mart_column_semantics
+title: カラムセマンティクス
+description: カラムのセマンティック役割 (entities/dimensions/measures の UNION)
+keywords:
+  - カタログ
+published: true
+fields:
+  - name: unique_id
+    description: mart_nodes への FK
+  - name: column_name
+    description: 対応するカラム名 (expr が単純識別子の場合のみ、NULL 可)
+  - name: semantic_role
+    description: 役割 (entity/dimension/measure)
+  - name: semantic_name
+    description: セマンティック名
+  - name: semantic_type
+    description: entity type または dimension type
+  - name: agg
+    description: measure の集計関数

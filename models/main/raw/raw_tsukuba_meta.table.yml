@@ -1,0 +1,4 @@
+schema: main
+name: raw_tsukuba_meta
+description: つくば市データセット (メタデータ)
+published: false

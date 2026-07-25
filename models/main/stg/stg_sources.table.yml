@@ -1,0 +1,4 @@
+schema: main
+name: stg_sources
+description: manifest.sources を展開
+published: false

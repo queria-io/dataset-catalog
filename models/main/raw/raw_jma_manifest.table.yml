@@ -1,0 +1,4 @@
+schema: main
+name: raw_jma_manifest
+description: 気象庁の気象データ (manifest)
+published: false

@@ -1,0 +1,4 @@
+schema: main
+name: raw_nlftp_meta
+description: 国土数値情報 (メタデータ)
+published: false

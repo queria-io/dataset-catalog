@@ -1,0 +1,4 @@
+schema: main
+name: raw_address_br_meta
+description: アドレス・ベース・レジストリ (メタデータ)
+published: false

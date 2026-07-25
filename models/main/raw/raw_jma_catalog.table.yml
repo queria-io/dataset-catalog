@@ -1,0 +1,4 @@
+schema: main
+name: raw_jma_catalog
+description: 気象庁の気象データ (catalog)
+published: false

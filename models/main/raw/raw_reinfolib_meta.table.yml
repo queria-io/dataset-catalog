@@ -1,0 +1,4 @@
+schema: main
+name: raw_reinfolib_meta
+description: 不動産情報ライブラリ (メタデータ)
+published: false

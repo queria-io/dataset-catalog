@@ -1,0 +1,4 @@
+schema: main
+name: stg_semantic_entities
+description: semantic_models.entities を展開
+published: false

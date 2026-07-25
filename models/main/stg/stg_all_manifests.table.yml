@@ -1,0 +1,4 @@
+schema: main
+name: stg_all_manifests
+description: 全データセットの manifest.json を UNION ALL (1 row/dataset)
+published: false

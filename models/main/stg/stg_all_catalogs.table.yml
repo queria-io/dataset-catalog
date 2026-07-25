@@ -1,0 +1,4 @@
+schema: main
+name: stg_all_catalogs
+description: 全データセットの catalog.json を UNION ALL
+published: false

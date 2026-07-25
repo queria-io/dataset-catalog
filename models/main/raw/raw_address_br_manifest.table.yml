@@ -1,0 +1,4 @@
+schema: main
+name: raw_address_br_manifest
+description: アドレス・ベース・レジストリ (manifest)
+published: false

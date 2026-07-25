@@ -1,0 +1,48 @@
+spec_version: "0.1"
+name: catalog
+title: Queriaカタログ
+description: Queriaで公開している全データセット・テーブル・列のメタデータを1つに統合したカタログ。データセットの検索、テーブルや列の探索、依存関係の把握に使う
+keywords:
+  - カタログ
+  - メタデータ
+  - Queria
+homepage: https://github.com/queria-io/dataset-catalog
+language: ja
+
+licenses:
+  - CC-BY-4.0
+
+sources:
+  - title: Queria
+    path: https://queria.io/
+
+contributors:
+  - title: Queria
+    path: https://queria.io/
+    roles: [author, rightsHolder]
+
+spatial_coverage: [JP]
+update_frequency: daily
+cover: 📚
+
+ai_context:
+  instructions: |
+    どのデータセットにどんなテーブルと列があるかを横断で探すのに使う。
+    データを分析する前に、使うテーブルを見つける入口として引く。
+    収録は Queria が公開している全データセット（20件・346テーブル・2500列・34スキーマ）の
+    メタデータで、データの中身そのものではない。件数や統計値はここには入っていない。
+    mart_search_entries はデータセット・テーブル・列を横断で検索するための1本の表。
+    キーワードから探すときはここを引くのが速い。
+    mart_lineage_edges はテーブル間の依存（親子）で、データセットをまたぐ依存は現在ない。
+    このカタログ自体も1つのデータセットとして収録されている。
+    内容は各データセットのビルド成果物から日次で作り直されるので、
+    元のデータセットの更新から反映まで1日ほど遅れることがある。
+  synonyms: [カタログ, メタデータ, データセット一覧, テーブル一覧]
+  examples:
+    - 人口に関するテーブルはどのデータセットにある？
+    - 法人番号を持つテーブルを横断で探したい
+    - このテーブルは何から作られている？
+
+schemas:
+  - name: main
+    title: メイン

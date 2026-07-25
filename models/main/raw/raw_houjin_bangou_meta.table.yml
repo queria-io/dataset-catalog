@@ -1,0 +1,4 @@
+schema: main
+name: raw_houjin_bangou_meta
+description: 国税庁法人番号 (メタデータ)
+published: false

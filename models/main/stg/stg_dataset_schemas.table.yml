@@ -1,0 +1,4 @@
+schema: main
+name: stg_dataset_schemas
+description: 各データセットのスキーマ一覧
+published: false

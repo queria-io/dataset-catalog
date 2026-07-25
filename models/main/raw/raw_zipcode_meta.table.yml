@@ -1,0 +1,4 @@
+schema: main
+name: raw_zipcode_meta
+description: 郵便番号データセット (メタデータ)
+published: false

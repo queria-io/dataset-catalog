@@ -1,0 +1,4 @@
+schema: main
+name: raw_edinet_catalog
+description: EDINET 書類一覧 (catalog)
+published: false

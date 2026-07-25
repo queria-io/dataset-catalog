@@ -1,0 +1,4 @@
+schema: main
+name: raw_tsukuba_manifest
+description: つくば市データセット (manifest)
+published: false

@@ -1,0 +1,10 @@
+schema: main
+name: mart_search_entries
+title: 検索エントリ
+description: 全文検索用エントリ
+keywords:
+  - カタログ
+published: true
+fields:
+  - name: entry_type
+    description: エントリ種別（table/column）

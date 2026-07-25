@@ -1,0 +1,4 @@
+schema: main
+name: raw_articles_meta
+description: Queriaショーケース記事 (メタデータ)
+published: false

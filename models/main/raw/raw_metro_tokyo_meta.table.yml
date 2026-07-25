@@ -1,0 +1,4 @@
+schema: main
+name: raw_metro_tokyo_meta
+description: 東京都オープンデータカタログ (メタデータ)
+published: false
