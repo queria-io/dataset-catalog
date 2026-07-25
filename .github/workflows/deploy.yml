@@ -18,9 +18,10 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # push 時の auto-expire (frozen-ducklake 0.11+) が古い snapshot を刈るため
-    # カタログは小さく保たれ、全体所要は 15 分強。30 分あれば十分。
-    timeout-minutes: 30
+    # 全体所要は約 29 分（pull の DuckDB->SQLite 変換 約 4.5 分 + dbt 約 7 分
+    # + push の SQLite->DuckDB 変換 約 16 分 + D1 同期 約 1 分）で 30 分では余裕がなく、
+    # 数分の揺れで timeout し cancelled になる。変換時間の短縮は別途対応。
+    timeout-minutes: 60
     env:
       PYTHONUNBUFFERED: "1"
       FDL_S3_ENDPOINT: https://${{ secrets.CF_ACCOUNT_ID }}.r2.cloudflarestorage.com
