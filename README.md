@@ -1,13 +1,13 @@
 ## 概要
 
 Queria で公開している全データセットのメタデータを統合したカタログデータセットです。
-各データセットの dbt artifacts (manifest.json / catalog.json) と fdl.toml を
+各データセットの dbt artifacts (manifest.json / catalog.json) と fdl.toml (公開済みのメタデータ) を
 data.queria.io から読み込み、テーブル定義・カラム定義・セマンティクス・リネージュ情報を
 一元管理しています。
 
 **バケットを直接読まないこと。** データセットは 1 つずつ `{name}/...` から
 `queria/{name}/...` へ移っており、どちらに実体があるかを知っているのは配信側だけ。
-バケットを直接読むと、移行済みのデータセットについては最後の fdl push が残した
+バケットを直接読むと、移行済みのデータセットについては移行前の push が残した
 古いオブジェクトを読み続ける (壊れずに陳腐化するので気づけない)。
 
 ## 主要テーブル
@@ -25,7 +25,7 @@ data.queria.io から読み込み、テーブル定義・カラム定義・セ�
 ## パイプライン
 
 1. `generate_sources.py` が `datasources.yml` を読み、以下を生成:
-   - `.fdl/artifacts/{name}_meta.json` (fdl.toml → JSON 変換)
+   - `.queria/artifacts/{name}_meta.json` (fdl.toml → JSON 変換)
    - `models/main/raw/raw_{name}_*.sql` (マクロ呼び出しのみ)
    - `models/main/stg/stg_all_*.sql` (UNION ALL)
 2. dbt が manifest.json / catalog.json を read_json で直接読み込み、stg/mart へ変換
