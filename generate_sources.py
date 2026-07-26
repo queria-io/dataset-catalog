@@ -37,18 +37,25 @@ def load_datasources() -> list[dict]:
         return yaml.safe_load(f)["datasources"]
 
 
-def detect_storage_base() -> tuple[str, str, bool]:
-    """Detect storage base from FDL_DATA_URL environment variable.
+#: Where the datasets are published. **Read every other dataset through this,
+#: not through the bucket**, because the datasets are moving one at a time from
+#: `{name}/...` to `queria/{name}/...` and only the delivery host knows which
+#: have moved: it answers the same URL from whichever key the dataset is at
+#: today. Reading the bucket directly means reading whatever the last fdl push
+#: left at the old key, which for a migrated dataset is frozen and looks fine.
+PUBLIC_URL = "https://data.queria.io"
 
-    Returns (base_url, target_name, is_s3).
-    FDL_DATA_URL points at ``<base>/catalog/ducklake.duckdb.files/``; stripping
-    the datasource segment and trailing ``ducklake.duckdb.files`` yields the
-    base shared by every dataset.
+
+def detect_storage_base() -> tuple[str, str, bool]:
+    """Where to read the other datasets from, and which fdl target that is.
+
+    Returns (base_url, target_name, is_remote). The remote case is the public
+    URL rather than the bucket (see PUBLIC_URL); the local case stays a path,
+    where nothing is migrating and there is no delivery host to ask.
     """
-    data_url = os.environ.get("FDL_DATA_URL", "")
+    data_url = os.environ.get("QUERIA_DATA_URL") or os.environ.get("FDL_DATA_URL", "")
     if data_url.startswith("s3://"):
-        bucket = os.environ["FDL_DATA_BUCKET"]
-        return f"s3://{bucket}", "default", True
+        return os.environ.get("QUERIA_PUBLIC_URL", PUBLIC_URL).rstrip("/"), "default", True
     elif data_url:
         # /abs/.../catalog/ducklake.duckdb.files/ → /abs/...
         base = str(Path(data_url).parent.parent)
@@ -58,39 +65,33 @@ def detect_storage_base() -> tuple[str, str, bool]:
         return base, "local", False
 
 
-def s3_get(client, bucket: str, key: str) -> bytes | None:
+def http_get(url: str) -> bytes | None:
+    """Fetch an object from the delivery host. None if it is not there."""
+    import urllib.error
+    import urllib.request
+
     try:
-        resp = client.get_object(Bucket=bucket, Key=key)
-        return resp["Body"].read()
-    except client.exceptions.NoSuchKey:
-        return None
+        with urllib.request.urlopen(url, timeout=60) as response:
+            return response.read()
+    except urllib.error.HTTPError as exc:
+        if exc.code == 404:
+            return None
+        raise
 
 
 def generate_meta_jsons(
-    datasources: list[dict], base_url: str, target_name: str, is_s3: bool
+    datasources: list[dict], base_url: str, target_name: str, is_remote: bool
 ) -> None:
     """Convert fdl.toml → JSON for each datasource."""
     ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
 
-    s3_client = None
-    s3_bucket = None
-    if is_s3:
-        import boto3
-        s3_client = boto3.client(
-            "s3",
-            endpoint_url=os.environ["FDL_S3_ENDPOINT"],
-            aws_access_key_id=os.environ["FDL_S3_ACCESS_KEY_ID"],
-            aws_secret_access_key=os.environ["FDL_S3_SECRET_ACCESS_KEY"],
-        )
-        s3_bucket = os.environ["FDL_S3_BUCKET"]
-
     for ds in datasources:
         name = ds["name"]
 
-        if is_s3:
-            raw = s3_get(s3_client, s3_bucket, f"{name}/fdl.toml")
+        if is_remote:
+            raw = http_get(f"{base_url}/{name}/fdl.toml")
             if not raw:
-                print(f"  {name}: fdl.toml not found on S3, skipping")
+                print(f"  {name}: fdl.toml not found at {base_url}/{name}/, skipping")
                 continue
             config = tomllib.loads(raw.decode())
         else:
@@ -173,13 +174,13 @@ def main() -> None:
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     STG_DIR.mkdir(parents=True, exist_ok=True)
 
-    base_url, target_name, is_s3 = detect_storage_base()
+    base_url, target_name, is_remote = detect_storage_base()
 
     # Set FDL_STORAGE_BASE for dbt macros (read_dataset_manifest/catalog)
     os.environ["FDL_STORAGE_BASE"] = base_url
 
     # Convert fdl.toml → JSON (generates .fdl/artifacts/{name}_meta.json)
-    generate_meta_jsons(datasources, base_url, target_name, is_s3)
+    generate_meta_jsons(datasources, base_url, target_name, is_remote)
 
     # Generate per-datasource raw models
     for ds in datasources:
