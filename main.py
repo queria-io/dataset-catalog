@@ -2,7 +2,7 @@
 
 manifest.json / catalog.json / semantic_manifest.json は各データセットの
 upload_artifacts.py により storage base ( FDL_DATA_URL から導出 ) に配置済み。
-fdl.toml は fdl push により配置済み。
+fdl.toml は移行前の公開で置かれたものを読む (gateway が配信し続ける)。
 generate_sources.py が raw モデルと meta JSON を生成し、
 dbt が read_json で直接読み込む。
 """

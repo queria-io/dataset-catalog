@@ -2,7 +2,7 @@
 
 SELECT *
 FROM read_json(
-    '.fdl/artifacts/{{ datasource }}_meta.json',
+    '.queria/artifacts/{{ datasource }}_meta.json',
     format='auto',
     columns={
         datasource: 'VARCHAR',
