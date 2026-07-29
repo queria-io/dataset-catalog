@@ -150,10 +150,15 @@ def generate_schema_yml(datasources: list[dict]) -> str:
 
 
 def warn_stale_files(datasources: list[dict]) -> None:
+    # The .table.yml next to each raw model is the dataset declaration. This
+    # script does not write those -- they are edited by hand -- but they belong
+    # to the same datasource, so they are expected here too. Leaving them out
+    # reported every one of them as stale and buried the real warnings.
     expected = {"_schema.yml"}
     for ds in datasources:
         for suffix in ["manifest", "catalog", "meta"]:
             expected.add(f"raw_{ds['name']}_{suffix}.sql")
+            expected.add(f"raw_{ds['name']}_{suffix}.table.yml")
     for path in RAW_DIR.iterdir():
         if path.name.startswith("."):
             continue
