@@ -62,10 +62,15 @@ def storage_base() -> str:
     return os.environ.get("QUERIA_PUBLIC_URL", PUBLIC_URL).rstrip("/")
 
 
-#: Sent on every fetch. The delivery host answers 403 to the User-Agent urllib
-#: sends by default (`Python-urllib/3.x`), which is what its bot filtering is
-#: for, so a build that does not say who it is cannot read any dataset at all.
-USER_AGENT = "queria-catalog (+https://github.com/queria-io/dataset-catalog)"
+#: Sent on every fetch. Cloudflare sits in front of the delivery host and bans
+#: the User-Agent urllib sends by default (`Python-urllib/3.x`) by signature:
+#: the reply is `error code: 1010`, not a rate limit, so retrying never helps
+#: and a build that does not name itself reads nothing at all.
+#:
+#: Named the way everything else here names itself (`queria-cli/{version}`,
+#: `queria-dataset-edinet/1.0`). No `(+url)`: that is for telling a stranger's
+#: site who is crawling it, and this only ever calls Queria's own delivery.
+USER_AGENT = "queria-catalog/1.0"
 
 
 def http_get(url: str) -> bytes | None:
