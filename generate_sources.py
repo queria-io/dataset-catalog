@@ -10,7 +10,7 @@ Generated files:
   - models/main/stg/stg_all_metas.sql (UNION ALL)
 
 Also generates:
-  - .queria/artifacts/{name}_meta.json (fdl.toml → JSON conversion)
+  - .queria/artifacts/{name}_meta.json (dataset.json または fdl.toml から変換)
 """
 
 from __future__ import annotations
@@ -88,42 +88,97 @@ def http_get(url: str) -> bytes | None:
         raise
 
 
-def generate_meta_jsons(datasources: list[dict], base_url: str) -> None:
-    """Convert fdl.toml → JSON for each datasource.
+def meta_from_declaration(declaration: dict, name: str, public_url: str) -> dict:
+    """Map a published dataset.json onto the shape the meta models read.
 
-    The fdl.toml objects are what the datasets published before the migration.
-    Nothing writes them any more; the gateway serves them for as long as this
-    reads them (contract: "fdl.toml は配信し続ける").
+    The declaration renamed most of what fdl.toml called these things, so the
+    mapping is spelled out rather than merged: keywords were tags, homepage was
+    repository_url, update_frequency was schedule, and the single license and
+    source became lists. Only the first of each list survives here, because
+    that is all the catalog has a column for.
+
+    ai_context is deliberately not mapped here. It has no counterpart in
+    fdl.toml, and no column in the catalog to land in yet -- where that prose
+    belongs is still being decided. Adding it before that would publish a
+    column nobody reads.
+    """
+    licenses = declaration.get("licenses") or [{}]
+    sources = declaration.get("sources") or [{}]
+    return {
+        "datasource": name,
+        "title": declaration.get("title") or "",
+        "description": declaration.get("description") or "",
+        "cover": declaration.get("cover") or "",
+        "tags": declaration.get("keywords") or [],
+        "repository_url": declaration.get("homepage") or "",
+        "schedule": declaration.get("update_frequency") or "",
+        "license": licenses[0].get("title") or "",
+        "license_url": licenses[0].get("url") or "",
+        "source_url": sources[0].get("path") or "",
+        "ducklake_url": f"{public_url}/{name}/ducklake.duckdb",
+        # fdl.toml held this as {name: {title, ...}}; the declaration lists it.
+        "schemas": {
+            s["name"]: {k: v for k, v in s.items() if k != "name"}
+            for s in (declaration.get("schemas") or [])
+            if s.get("name")
+        },
+    }
+
+
+def meta_from_fdl_toml(config: dict, name: str) -> dict:
+    """Map a published fdl.toml onto the same shape."""
+    meta = config.get("meta", {})
+    target = config.get("targets", {}).get("default", {})
+    public_url = target.get("public_url", PUBLIC_URL)
+
+    return {
+        "datasource": name,
+        "title": meta.get("title", ""),
+        "description": meta.get("description", ""),
+        "cover": meta.get("cover", ""),
+        "tags": meta.get("tags", []),
+        "repository_url": meta.get("repository_url", ""),
+        "schedule": meta.get("schedule", ""),
+        "license": meta.get("license", ""),
+        "license_url": meta.get("license_url", ""),
+        "source_url": meta.get("source_url", ""),
+        "ducklake_url": f"{public_url}/{name}/ducklake.duckdb",
+        "schemas": meta.get("schemas", {}),
+    }
+
+
+def generate_meta_jsons(datasources: list[dict], base_url: str) -> None:
+    """Write one meta JSON per datasource, from whichever metadata it publishes.
+
+    dataset.json is what a dataset publishes once it has moved to declarations,
+    and it is the only one of the two that is still being written. fdl.toml is
+    what the rest published before the migration; nothing updates those any
+    more, and the gateway serves them for as long as this reads them
+    (contract: "fdl.toml は配信し続ける").
+
+    So the declaration wins where there is one. Reading fdl.toml for a migrated
+    dataset would show whatever its metadata said on the day it stopped being
+    the source of truth.
     """
     ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
 
     for ds in datasources:
         name = ds["name"]
 
-        raw = http_get(f"{base_url}/{name}/fdl.toml")
-        if not raw:
-            print(f"  {name}: fdl.toml not found at {base_url}/{name}/, skipping")
-            continue
-        config = tomllib.loads(raw.decode())
-
-        meta = config.get("meta", {})
-        target = config.get("targets", {}).get("default", {})
-        public_url = target.get("public_url", "https://data.queria.io")
-
-        out = {
-            "datasource": name,
-            "title": meta.get("title", ""),
-            "description": meta.get("description", ""),
-            "cover": meta.get("cover", ""),
-            "tags": meta.get("tags", []),
-            "repository_url": meta.get("repository_url", ""),
-            "schedule": meta.get("schedule", ""),
-            "license": meta.get("license", ""),
-            "license_url": meta.get("license_url", ""),
-            "source_url": meta.get("source_url", ""),
-            "ducklake_url": f"{public_url}/{name}/ducklake.duckdb",
-            "schemas": meta.get("schemas", {}),
-        }
+        raw = http_get(f"{base_url}/{name}/dataset.json")
+        if raw:
+            out = meta_from_declaration(json.loads(raw.decode()), name, base_url)
+            print(f"  {name}: dataset.json")
+        else:
+            raw = http_get(f"{base_url}/{name}/fdl.toml")
+            if not raw:
+                print(
+                    f"  {name}: neither dataset.json nor fdl.toml at "
+                    f"{base_url}/{name}/, skipping"
+                )
+                continue
+            out = meta_from_fdl_toml(tomllib.loads(raw.decode()), name)
+            print(f"  {name}: fdl.toml (not migrated to a declaration yet)")
 
         out_path = ARTIFACTS_DIR / f"{name}_meta.json"
         with open(out_path, "w") as f:

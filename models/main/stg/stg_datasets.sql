@@ -1,6 +1,6 @@
 {{ config(materialized='view') }}
 
--- fdl.toml メタデータ + manifest.metadata を統合
+-- データセットのメタデータ (dataset.json または fdl.toml) + manifest.metadata を統合
 
 SELECT
     m.datasource,
