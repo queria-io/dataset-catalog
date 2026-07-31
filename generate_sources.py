@@ -62,13 +62,20 @@ def storage_base() -> str:
     return os.environ.get("QUERIA_PUBLIC_URL", PUBLIC_URL).rstrip("/")
 
 
+#: Sent on every fetch. The delivery host answers 403 to the User-Agent urllib
+#: sends by default (`Python-urllib/3.x`), which is what its bot filtering is
+#: for, so a build that does not say who it is cannot read any dataset at all.
+USER_AGENT = "queria-catalog (+https://github.com/queria-io/dataset-catalog)"
+
+
 def http_get(url: str) -> bytes | None:
     """Fetch an object from the delivery host. None if it is not there."""
     import urllib.error
     import urllib.request
 
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     try:
-        with urllib.request.urlopen(url, timeout=60) as response:
+        with urllib.request.urlopen(request, timeout=60) as response:
             return response.read()
     except urllib.error.HTTPError as exc:
         if exc.code == 404:
