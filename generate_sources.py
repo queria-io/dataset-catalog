@@ -62,13 +62,20 @@ def storage_base() -> str:
     return os.environ.get("QUERIA_PUBLIC_URL", PUBLIC_URL).rstrip("/")
 
 
+#: Sent on every read of the delivery host. urllib's default
+#: (`Python-urllib/3.x`) is refused there with a 403 before the request reaches
+#: the gateway, so the name has to be set for the build to read anything at all.
+USER_AGENT = "queria-dataset-catalog"
+
+
 def http_get(url: str) -> bytes | None:
     """Fetch an object from the delivery host. None if it is not there."""
     import urllib.error
     import urllib.request
 
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     try:
-        with urllib.request.urlopen(url, timeout=60) as response:
+        with urllib.request.urlopen(request, timeout=60) as response:
             return response.read()
     except urllib.error.HTTPError as exc:
         if exc.code == 404:
