@@ -62,13 +62,25 @@ def storage_base() -> str:
     return os.environ.get("QUERIA_PUBLIC_URL", PUBLIC_URL).rstrip("/")
 
 
+#: Sent on every fetch. Cloudflare sits in front of the delivery host and bans
+#: the User-Agent urllib sends by default (`Python-urllib/3.x`) by signature:
+#: the reply is `error code: 1010`, not a rate limit, so retrying never helps
+#: and a build that does not name itself reads nothing at all.
+#:
+#: Named the way everything else here names itself (`queria-cli/{version}`,
+#: `queria-dataset-edinet/1.0`). No `(+url)`: that is for telling a stranger's
+#: site who is crawling it, and this only ever calls Queria's own delivery.
+USER_AGENT = "queria-catalog/1.0"
+
+
 def http_get(url: str) -> bytes | None:
     """Fetch an object from the delivery host. None if it is not there."""
     import urllib.error
     import urllib.request
 
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     try:
-        with urllib.request.urlopen(url, timeout=60) as response:
+        with urllib.request.urlopen(request, timeout=60) as response:
             return response.read()
     except urllib.error.HTTPError as exc:
         if exc.code == 404:
