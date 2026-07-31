@@ -1,7 +1,7 @@
 schema: main
 name: mart_datasets
 title: データセット一覧
-description: データセット一覧（fdl.toml + manifest.metadata）
+description: データセット一覧（dataset.json または fdl.toml + manifest.metadata）
 keywords:
   - カタログ
 published: true
@@ -30,6 +30,8 @@ fields:
     description: データソース URL
   - name: schemas_json
     description: スキーマごとのメタデータ (JSON)
+  - name: ai_context_json
+    description: エージェント向けの補足（instructions / synonyms / examples）。dataset.json を公開しているデータセットのみ。未移行のものは NULL
   - name: dbt_version
     description: dbt バージョン (manifest.metadata)
   - name: dbt_generated_at

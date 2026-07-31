@@ -1,6 +1,6 @@
 {{ config(materialized='view') }}
 
--- fdl.toml メタデータ + manifest.metadata を統合
+-- データセットのメタデータ (dataset.json または fdl.toml) + manifest.metadata を統合
 
 SELECT
     m.datasource,
@@ -15,6 +15,8 @@ SELECT
     m.license_url,
     m.source_url,
     m.schemas AS schemas_json,
+    -- dataset.json のみが持つ。fdl.toml のままのデータセットは NULL
+    m.ai_context AS ai_context_json,
     -- manifest.metadata
     mf.metadata->>'dbt_version' AS dbt_version,
     mf.metadata->>'generated_at' AS dbt_generated_at,

@@ -16,7 +16,8 @@ FROM read_json(
         license_url: 'VARCHAR',
         source_url: 'VARCHAR',
         ducklake_url: 'VARCHAR',
-        schemas: 'JSON'
+        schemas: 'JSON',
+        ai_context: 'JSON'
     }
 )
 
