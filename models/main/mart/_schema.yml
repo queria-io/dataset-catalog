@@ -389,7 +389,7 @@ models:
         published: true
     columns:
       - name: entry_type
-        description: エントリ種別（table/column）
+        description: エントリ種別（dataset/table/column）
       - name: datasource
       - name: schema_name
       - name: table_name
