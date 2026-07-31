@@ -15,8 +15,6 @@ SELECT
     m.license_url,
     m.source_url,
     m.schemas AS schemas_json,
-    -- 検索用。mart_datasets には出さない（下記 mart_search_entries が使う）
-    m.synonyms AS synonyms_json,
     -- manifest.metadata
     mf.metadata->>'dbt_version' AS dbt_version,
     mf.metadata->>'generated_at' AS dbt_generated_at,

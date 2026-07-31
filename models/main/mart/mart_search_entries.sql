@@ -5,17 +5,15 @@ WITH published_models AS (
 ),
 
 -- データセット単位のエントリ。これまでテーブルとカラムしか索引しておらず、
--- 「そのデータセットを何と呼ぶか」で辿り着けなかった。keywords（分類語）と
--- ai_context.synonyms（このデータセット固有の別名。SSDS、政府統計 など）を
--- 検索対象に入れる。どちらもここに入るまでは誰も読んでいなかった。
-dataset_words AS (
+-- 「そのデータセットを何と呼ぶか」では辿り着けなかった。keywords はここに
+-- 入るまで誰も読んでいなかった。
+dataset_keywords AS (
     SELECT
         d.datasource,
         STRING_AGG(word.value::VARCHAR, ' ') AS words
     FROM {{ ref('stg_datasets') }} d,
         LATERAL UNNEST(
             COALESCE(CAST(d.tags_json AS VARCHAR[]), ARRAY[]::VARCHAR[])
-            || COALESCE(CAST(d.synonyms_json AS VARCHAR[]), ARRAY[]::VARCHAR[])
         ) AS word(value)
     GROUP BY d.datasource
 ),
@@ -35,7 +33,7 @@ datasets AS (
             COALESCE(w.words, '') AS search_text,
         '/datasets/' || d.datasource AS href
     FROM {{ ref('stg_datasets') }} d
-    LEFT JOIN dataset_words w ON d.datasource = w.datasource
+    LEFT JOIN dataset_keywords w ON d.datasource = w.datasource
 ),
 
 tags_agg AS (
