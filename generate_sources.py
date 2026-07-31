@@ -97,10 +97,11 @@ def meta_from_declaration(declaration: dict, name: str, public_url: str) -> dict
     source became lists. Only the first of each list survives here, because
     that is all the catalog has a column for.
 
-    ai_context is deliberately not mapped here. It has no counterpart in
-    fdl.toml, and no column in the catalog to land in yet -- where that prose
-    belongs is still being decided. Adding it before that would publish a
-    column nobody reads.
+    ai_context has no counterpart in fdl.toml. Only its synonyms are carried
+    through, and only as far as the search index: they are the words someone
+    calls this dataset when they do not know its name, which is exactly what
+    a keyword search is for. The rest of ai_context stays unread until there
+    is somewhere it belongs.
     """
     licenses = declaration.get("licenses") or [{}]
     sources = declaration.get("sources") or [{}]
@@ -122,6 +123,7 @@ def meta_from_declaration(declaration: dict, name: str, public_url: str) -> dict
             for s in (declaration.get("schemas") or [])
             if s.get("name")
         },
+        "synonyms": (declaration.get("ai_context") or {}).get("synonyms") or [],
     }
 
 
@@ -144,6 +146,9 @@ def meta_from_fdl_toml(config: dict, name: str) -> dict:
         "source_url": meta.get("source_url", ""),
         "ducklake_url": f"{public_url}/{name}/ducklake.duckdb",
         "schemas": meta.get("schemas", {}),
+        # fdl.toml has no synonyms. Written anyway so every artifact has the
+        # same keys and read_json does not have to guess.
+        "synonyms": [],
     }
 
 

@@ -4,6 +4,40 @@ WITH published_models AS (
     WHERE resource_type = 'model' AND is_published = true
 ),
 
+-- データセット単位のエントリ。これまでテーブルとカラムしか索引しておらず、
+-- 「そのデータセットを何と呼ぶか」で辿り着けなかった。keywords（分類語）と
+-- ai_context.synonyms（このデータセット固有の別名。SSDS、政府統計 など）を
+-- 検索対象に入れる。どちらもここに入るまでは誰も読んでいなかった。
+dataset_words AS (
+    SELECT
+        d.datasource,
+        STRING_AGG(word.value::VARCHAR, ' ') AS words
+    FROM {{ ref('stg_datasets') }} d,
+        LATERAL UNNEST(
+            COALESCE(CAST(d.tags_json AS VARCHAR[]), ARRAY[]::VARCHAR[])
+            || COALESCE(CAST(d.synonyms_json AS VARCHAR[]), ARRAY[]::VARCHAR[])
+        ) AS word(value)
+    GROUP BY d.datasource
+),
+
+datasets AS (
+    SELECT
+        'dataset' AS entry_type,
+        d.datasource,
+        NULL::VARCHAR AS schema_name,
+        NULL::VARCHAR AS table_name,
+        NULL::VARCHAR AS table_title,
+        NULL::VARCHAR AS column_name,
+        d.description,
+        REPLACE(d.datasource, '_', ' ') || ' ' ||
+            COALESCE(d.title, '') || ' ' ||
+            COALESCE(d.description, '') || ' ' ||
+            COALESCE(w.words, '') AS search_text,
+        '/datasets/' || d.datasource AS href
+    FROM {{ ref('stg_datasets') }} d
+    LEFT JOIN dataset_words w ON d.datasource = w.datasource
+),
+
 tags_agg AS (
     SELECT
         n.datasource,
@@ -56,6 +90,8 @@ columns AS (
         ON c.datasource = n.datasource AND c.unique_id = n.unique_id
 )
 
+SELECT * FROM datasets
+UNION ALL
 SELECT * FROM tables
 UNION ALL
 SELECT * FROM columns
