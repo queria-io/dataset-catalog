@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: mart_datasets
-    description: データセット一覧（dataset.json または fdl.toml + manifest.metadata）
+    description: データセット一覧（fdl.toml + manifest.metadata）
     access: public
     config:
       contract:
@@ -47,9 +47,6 @@ models:
         data_type: VARCHAR
       - name: schemas_json
         description: スキーマごとのメタデータ (JSON)
-        data_type: JSON
-      - name: ai_context_json
-        description: エージェント向けの補足（instructions / synonyms / examples）。dataset.json を公開しているデータセットのみ。未移行のものは NULL
         data_type: JSON
       - name: dbt_version
         description: dbt バージョン (manifest.metadata)
