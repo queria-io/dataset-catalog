@@ -29,4 +29,4 @@ data.queria.io から読み込み、テーブル定義・カラム定義・セ�
    - `models/main/raw/raw_{name}_*.sql` (マクロ呼び出しのみ)
    - `models/main/stg/stg_all_*.sql` (UNION ALL)
 2. dbt が manifest.json / catalog.json を read_json で直接読み込み、stg/mart へ変換
-3. `scripts/sync_catalog_d1.py` が mart テーブルを Cloudflare D1 に同期
+3. `queria push` が mart テーブルを公開し、配信側がカタログとして提供する

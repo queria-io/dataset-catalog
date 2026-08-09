@@ -18,17 +18,14 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # 全体所要は約 29 分（pull の DuckDB->SQLite 変換 約 4.5 分 + dbt 約 7 分
-    # + push の SQLite->DuckDB 変換 約 16 分 + D1 同期 約 1 分）で 30 分では余裕がなく、
+    # 全体所要は約 28 分（pull の DuckDB->SQLite 変換 約 4.5 分 + dbt 約 7 分
+    # + push の SQLite->DuckDB 変換 約 16 分）で 30 分では余裕がなく、
     # 数分の揺れで timeout し cancelled になる。変換時間の短縮は別途対応。
     timeout-minutes: 60
     env:
       PYTHONUNBUFFERED: "1"
       # queria は誰のデータセットに書くのかをトークンから決める。R2 の鍵は渡さない
       QUERIA_TOKEN: ${{ secrets.QUERIA_TOKEN }}
-      CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-      CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-      CF_D1_DATABASE_ID: ${{ secrets.CF_D1_DATABASE_ID }}
     steps:
       - uses: actions/checkout@v5
 
@@ -42,9 +39,6 @@ jobs:
 
       - name: Sync catalog
         run: scripts/build.sh
-
-      - name: Sync catalog to D1
-        run: uv run --with cloudflare python scripts/sync_catalog_d1.py
 
   notify-failure:
     runs-on: ubuntu-latest
